@@ -1,1 +1,1 @@
-HELLO
+The app's name is Party Player and its purpose is to create playlists for parties. Guests come into the party and add genres or songs to the playlist and the app auto generates a playlist that can be tweaked in real time. This app takes the hassle out of trying to curate the perfect playlist for a party because everyone there gets to listen to their taste of music.
