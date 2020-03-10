@@ -41,7 +41,6 @@ class PlayerActivity : AppCompatActivity() {
     private fun setupListeners() {
         playButton.setOnClickListener {
             SpotifyService.play("potify:playlist:4CFWluyHMClrtcRd9FtAYG")
-            SpotifyService.playerApi.play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL")
             showPauseButton()
         }
 
