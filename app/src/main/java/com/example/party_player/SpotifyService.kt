@@ -1,10 +1,13 @@
 package com.example.party_player
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
+import com.spotify.protocol.types.ImageUri
+import com.spotify.protocol.types.Track
 
 enum class PlayingState {
     PAUSED, PLAYING, STOPPED
@@ -58,5 +61,35 @@ object SpotifyService {
                 handler(PlayingState.PLAYING)
             }
         }
+    }
+
+    fun getCurrentTrack(handler: (track: Track) -> Unit) {
+        spotifyAppRemote?.playerApi?.playerState?.setResultCallback { result ->
+            handler(result.track)
+        }
+    }
+
+    fun getImage(imageUri: ImageUri, handler: (Bitmap) -> Unit)  {
+        spotifyAppRemote?.imagesApi?.getImage(imageUri)?.setResultCallback {
+            handler(it)
+        }
+    }
+
+    fun suscribeToChanges(handler: (Track) -> Unit) {
+        spotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback {
+            handler(it.track)
+        }
+    }
+
+    fun getCurrentTrackImage(handler: (Bitmap) -> Unit)  {
+        getCurrentTrack {
+            getImage(it.imageUri) {
+                handler(it)
+            }
+        }
+    }
+
+    fun disconnect() {
+        SpotifyAppRemote.disconnect(spotifyAppRemote)
     }
 }

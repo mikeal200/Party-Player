@@ -1,18 +1,20 @@
 package com.example.party_player
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_player.*
 
 class PlayerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
-        //setupViews()
-        //etupListeners()
+        setupViews()
+        setupListeners()
     }
 
-    /*private fun setupViews () {
+    private fun setupViews () {
         SpotifyService.playingState {
             when(it) {
                 PlayingState.PLAYING -> showPauseButton()
@@ -22,9 +24,24 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
+    private fun showPlayButton() {
+        playButton.visibility = View.VISIBLE
+    }
+
+    private fun showPauseButton() {
+        pauseButton.visibility = View.VISIBLE
+    }
+
+    private fun showResumeButton() {
+        resumeButton.visibility = View.VISIBLE
+    }
+
+
+
     private fun setupListeners() {
         playButton.setOnClickListener {
-            SpotifyService.play("spotify:album:5L8VJO457GXReKVVfRhzyM")
+            SpotifyService.play("potify:playlist:4CFWluyHMClrtcRd9FtAYG")
+            SpotifyService.playerApi.play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL")
             showPauseButton()
         }
 
@@ -37,5 +54,11 @@ class PlayerActivity : AppCompatActivity() {
             SpotifyService.resume()
             showPauseButton()
         }
-    }*/
+    }
+
+
+    override fun onStop() {
+        super.onStop()
+        SpotifyService.disconnect()
+    }
 }
