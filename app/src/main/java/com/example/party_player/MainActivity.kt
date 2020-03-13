@@ -1,15 +1,15 @@
 package com.example.party_player
 
-import android.os.Bundle;
+import android.os.Bundle
 
-import android.util.Log;
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
-import com.spotify.android.appremote.api.ConnectionParams;
-import com.spotify.android.appremote.api.Connector;
-import com.spotify.android.appremote.api.SpotifyAppRemote;
+import com.spotify.android.appremote.api.ConnectionParams
+import com.spotify.android.appremote.api.Connector
+import com.spotify.android.appremote.api.SpotifyAppRemote
 
-import com.spotify.protocol.types.Track;
+import com.spotify.protocol.types.Track
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,9 +46,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun connected() {
-        spotifyAppRemote?.let {
+        spotifyAppRemote.let {
             // Play a playlist
-            val playlistURI = "spotify:playlist:37i9dQZF1DX2sUQwD7tbmL"
+            val playlistURI = "spotify:playlist:19Zi93JmIGSaw0Gk57FajH"
             it.playerApi.play(playlistURI)
             // Subscribe to PlayerState
             it.playerApi.subscribeToPlayerState().setEventCallback {
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        spotifyAppRemote?.let {
+        spotifyAppRemote.let {
             SpotifyAppRemote.disconnect(it)
         }
 
