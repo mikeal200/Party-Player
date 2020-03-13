@@ -1,4 +1,4 @@
-package com.example.party_player
+package com.example.partyPlayer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
