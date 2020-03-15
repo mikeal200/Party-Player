@@ -87,6 +87,14 @@ class MainActivity : AppCompatActivity() {
             spotifyAppRemote.playerApi.resume()
             showPauseButton()
         }
+
+        nextSongButton.setOnClickListener {
+            spotifyAppRemote.playerApi.skipNext()
+        }
+
+        previousSongButton.setOnClickListener {
+            spotifyAppRemote.playerApi.skipPrevious()
+        }
     }
 
     private fun connected() {
