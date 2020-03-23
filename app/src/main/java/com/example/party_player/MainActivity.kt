@@ -11,6 +11,10 @@ import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.protocol.types.Empty
 import com.spotify.protocol.types.Track
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,6 +30,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setupViews()
         setupListeners()
+        CoroutineScope(IO).launch {
+            getResult()
+        }
     }
 
     private fun setupViews () {
@@ -36,6 +43,11 @@ class MainActivity : AppCompatActivity() {
                 PlayingState.PAUSED -> showResumeButton()
             }
         }
+    }
+
+    private suspend fun getResult() {
+        val test = SpotifyScrape()
+        delay(1000)
     }
 
     private fun showPlayButton() {
@@ -74,7 +86,7 @@ class MainActivity : AppCompatActivity() {
                     // Something went wrong when attempting to connect! Handle errors here
                 }
             })
-            SpotifyService.play("spotify:playlist:19Zi93JmIGSaw0Gk57FajH")
+            SpotifyService.play("spotify:track:1lNRVjK8MukRZpeurYssIx")
             showPauseButton()
         }
 
@@ -100,7 +112,7 @@ class MainActivity : AppCompatActivity() {
     private fun connected() {
         spotifyAppRemote.let {
             // Play a playlist
-            val playlistURI = "spotify:playlist:19Zi93JmIGSaw0Gk57FajH"
+            val playlistURI = "spotify:track:1lNRVjK8MukRZpeurYssIx"
             it.playerApi.play(playlistURI)
             // Subscribe to PlayerState
             it.playerApi.subscribeToPlayerState().setEventCallback {
