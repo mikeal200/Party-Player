@@ -24,7 +24,12 @@ public class SpotifyScrape extends AsyncTask<Void, Void, String> {
         Document doc = null;
 
         try {
-            doc = Jsoup.connect("https://open.spotify.com/search/watermelon%20man").get();
+            doc = Jsoup.connect("https://open.spotify.com/search/watermelon%20man")
+                    .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
+                    .referrer("http://www.google.com")
+                    .ignoreHttpErrors(true)
+                    .get();
+            System.out.println(doc + "yea dude");
             Thread.sleep(1000);
         }
         catch(IOException e) {
