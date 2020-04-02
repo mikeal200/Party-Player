@@ -1,14 +1,12 @@
 package com.example.party_player
 
+import com.example.party_player.paks.Tracks
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface SpotifyApi {
 
-    /*@GET("search?q={lastName}%2C%20watermelon%20man&type=track%2Cartist")
-    fun searchTracks(@Path("artistName") String artist,
-                     @Path("track") String songName,
-                     @Header("Authorization") String accessToken): Call<ArrayList<Track>>*/
+    /*@FormUrlEncoded
+    @PUT("me/player/play")
+    fun playSong(): Call<List>*/
 }
