@@ -15,6 +15,7 @@ import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
 import com.spotify.sdk.android.auth.BuildConfig.VERSION_NAME
+import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -41,9 +42,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setupListeners()
         supportActionBar?.title = String.format(Locale.US, "Spotify Auth Sample %s", VERSION_NAME)
-
-
     }
 
     fun fetchJson() {
@@ -144,7 +144,6 @@ class MainActivity : AppCompatActivity() {
                         .getJSONArray("devices")
                         .getJSONObject(0)
                         .getString("id")
-                    playSong()
                 } catch (e: JSONException) {
                     setResponse("Failed to parse data: $e")
                 }
@@ -165,11 +164,22 @@ class MainActivity : AppCompatActivity() {
         requestDevices()
     }
 
+    private fun setupListeners() {
+
+        playButton.setOnClickListener {
+            playSong()
+        }
+
+        /*pauseButton.setOnClickListener {
+            pauseSong()
+        }*/
+    }
+
     private fun queueSong() {
 
     }
 
-    private fun playSong() {
+    private fun pauseSong() {
         val body = FormBody.Builder()
             .build()
 
@@ -177,7 +187,7 @@ class MainActivity : AppCompatActivity() {
             .addHeader("Accept", "application/json")
             .addHeader("Content-Type", "application/json")
             .addHeader("Content-Length", "0")
-            .addHeader("Authorization", "Bearer BQCvgVQoCDSxha63vtphxbHgxvZqr_iWhuVOP1EP7ZMahI8edbeN3izejYlh219B6m9Nj7rrC0TVsrt8fgfhkXXOYhcVFHt2tTdUhyFuEYncGPdUyrjybm-HJ_a8eloA3KvYVROoySr0st1fK-tPE78OYFYpY85vj06oYfcq4o9q")
+            .addHeader("Authorization", "Bearer $mAccessToken")
             .url("https://api.spotify.com/v1/me/player/play")
             .put(body)
             .build()
@@ -194,7 +204,43 @@ class MainActivity : AppCompatActivity() {
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
                 try {
-                    println("--------------------------------------------------------------------")
+                    println("--------------------------------------------------------------------$response")
+
+                } catch (e: JSONException) {
+                    setResponse("Failed to parse data: $e")
+                }
+            }
+        })
+    }
+
+
+    private fun playSong() {
+        val body = FormBody.Builder()
+            .build()
+
+        val request = Request.Builder()
+            .addHeader("Accept", "application/json")
+            .addHeader("Content-Type", "application/json")
+            .addHeader("Content-Length", "0")
+            .addHeader("Authorization", "Bearer $mAccessToken")
+            .url("https://api.spotify.com/v1/me/player/play")
+            .put(body)
+            .build()
+
+        cancelCall()
+
+        mCall = mOkHttpClient.newCall(request)
+
+        mCall?.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                setResponse("Failed to fetch data: $e")
+            }
+
+            @Throws(IOException::class)
+            override fun onResponse(call: Call, response: Response) {
+                try {
+                    println("--------------------------------------------------------------------$response")
+
                 } catch (e: JSONException) {
                     setResponse("Failed to parse data: $e")
                 }
@@ -210,7 +256,7 @@ class MainActivity : AppCompatActivity() {
     private fun getAuthenticationRequest(type: AuthorizationResponse.Type): AuthorizationRequest {
         return AuthorizationRequest.Builder(CLIENT_ID, type, redirectUri.toString())
             .setShowDialog(false)
-            .setScopes(arrayOf("user-read-playback-state"))
+            .setScopes(arrayOf("user-modify-playback-state"))
             .setCampaign("your-campaign-token")
             .build()
     }
