@@ -1,6 +1,7 @@
 package com.example.party_player
 
 
+import SpotifyRequests
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -33,16 +34,18 @@ class MainActivity : AppCompatActivity() {
     lateinit var TRACK_URI: String
     lateinit var DEVICE_ID: String
 
-    private val mOkHttpClient: OkHttpClient = OkHttpClient()
+    val mOkHttpClient: OkHttpClient = OkHttpClient()
     var mAccessToken: String? = null
     private var mAccessCode: String? = null
-    private var mCall: Call? = null
-
+    var mCall: Call? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupListeners()
+        if (onRequestTokenClicked()) {
+            //onRequestCodeClicked()
+        }
         supportActionBar?.title = String.format(Locale.US, "Spotify Auth Sample %s", VERSION_NAME)
     }
 
@@ -157,10 +160,10 @@ class MainActivity : AppCompatActivity() {
         snackbar.show()
     }
 
-    fun onRequestCodeClicked(view: View) {
+    fun onRequestCodeClicked() {
         val request = getAuthenticationRequest(AuthorizationResponse.Type.CODE)
         AuthorizationClient.openLoginActivity(this, AUTH_CODE_REQUEST_CODE, request)
-        fetchJson()
+        //fetchJson()
         requestDevices()
     }
 
@@ -170,13 +173,47 @@ class MainActivity : AppCompatActivity() {
             playSong()
         }
 
-        /*pauseButton.setOnClickListener {
+        pauseButton.setOnClickListener {
             pauseSong()
-        }*/
+        }
     }
 
     private fun queueSong() {
 
+    }
+
+    fun playSong() {
+        val body = FormBody.Builder()
+            .build()
+
+        val request = Request.Builder()
+            .addHeader("Accept", "application/json")
+            .addHeader("Content-Type", "application/json")
+            .addHeader("Content-Length", "0")
+            .addHeader("Authorization", "Bearer $mAccessToken")
+            .url("https://api.spotify.com/v1/me/player/play")
+            .put(body)
+            .build()
+
+            cancelCall()
+
+        mCall = mOkHttpClient.newCall(request)
+
+        mCall?.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                setResponse("Failed to fetch data: $e")
+            }
+
+            @Throws(IOException::class)
+            override fun onResponse(call: Call, response: Response) {
+                try {
+                    println("--------------------------------------------------------------------$response")
+
+                } catch (e: JSONException) {
+                    setResponse("Failed to parse data: $e")
+                }
+            }
+        })
     }
 
     private fun pauseSong() {
@@ -186,9 +223,8 @@ class MainActivity : AppCompatActivity() {
         val request = Request.Builder()
             .addHeader("Accept", "application/json")
             .addHeader("Content-Type", "application/json")
-            .addHeader("Content-Length", "0")
             .addHeader("Authorization", "Bearer $mAccessToken")
-            .url("https://api.spotify.com/v1/me/player/play")
+            .url("https://api.spotify.com/v1/me/player/pause")
             .put(body)
             .build()
 
@@ -214,43 +250,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun playSong() {
-        val body = FormBody.Builder()
-            .build()
-
-        val request = Request.Builder()
-            .addHeader("Accept", "application/json")
-            .addHeader("Content-Type", "application/json")
-            .addHeader("Content-Length", "0")
-            .addHeader("Authorization", "Bearer $mAccessToken")
-            .url("https://api.spotify.com/v1/me/player/play")
-            .put(body)
-            .build()
-
-        cancelCall()
-
-        mCall = mOkHttpClient.newCall(request)
-
-        mCall?.enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                setResponse("Failed to fetch data: $e")
-            }
-
-            @Throws(IOException::class)
-            override fun onResponse(call: Call, response: Response) {
-                try {
-                    println("--------------------------------------------------------------------$response")
-
-                } catch (e: JSONException) {
-                    setResponse("Failed to parse data: $e")
-                }
-            }
-        })
-    }
-
-    fun onRequestTokenClicked(view: View) {
+    fun onRequestTokenClicked(): Boolean {
         val request = getAuthenticationRequest(AuthorizationResponse.Type.TOKEN)
         AuthorizationClient.openLoginActivity(this, AUTH_TOKEN_REQUEST_CODE, request)
+        return true
     }
 
     private fun getAuthenticationRequest(type: AuthorizationResponse.Type): AuthorizationRequest {
@@ -274,7 +277,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setResponse(text: String) {
+    fun setResponse(text: String) {
         runOnUiThread {
             findViewById<TextView>(R.id.response_text_view)?.text = text
         }
@@ -288,7 +291,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.code_text_view)?.text = getString(R.string.code, mAccessCode)
     }
 
-    private fun cancelCall() {
+    fun cancelCall() {
         mCall?.cancel()
     }
 
@@ -298,9 +301,3 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
-
-/*class Search(val tracks: List<Track>)
-
-class Track(val href: String, val items: List<Item>)
-
-class Item (var uri: String)*/
