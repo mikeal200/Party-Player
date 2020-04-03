@@ -43,16 +43,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupListeners()
-        if (onRequestTokenClicked()) {
-            //onRequestCodeClicked()
-        }
-        supportActionBar?.title = String.format(Locale.US, "Spotify Auth Sample %s", VERSION_NAME)
+        onRequestTokenClicked()
+        supportActionBar?.title = String.format(Locale.US, "Party-Player")
     }
 
-    fun fetchJson() {
+    fun songSearch(query: String) {
         println("Attempting to fetch json")
 
-        val url = "https://api.spotify.com/v1/search?q=herbie%20hancock%2C%20watermelon%20man&type=track%2Cartist&market=US&limit=1"
+        val url = "https://api.spotify.com/v1/search?q=$query&type=track%2Cartist&market=US&limit=1"
 
         val request = Request.Builder()
             .url(url)
@@ -84,17 +82,77 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    fun nextSong() {
+        val body = FormBody.Builder()
+            .build()
+
+        val request = Request.Builder()
+            .addHeader("Accept", "application/json")
+            .addHeader("Content-Type", "application/json")
+            .addHeader("Content-Length", "0")
+            .addHeader("Authorization", "Bearer $mAccessToken")
+            .url("https://api.spotify.com/v1/me/player/next")
+            .post(body)
+            .build()
+
+        cancelCall()
+
+        mCall = mOkHttpClient.newCall(request)
+
+        mCall?.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                setResponse("Failed to fetch data: $e")
+            }
+
+            @Throws(IOException::class)
+            override fun onResponse(call: Call, response: Response) {
+                try {
+                    println("--------------------------------------------------------------------$response")
+
+                } catch (e: JSONException) {
+                    setResponse("Failed to parse data: $e")
+                }
+            }
+        })
+    }
+
+    fun previousSong() {
+        val body = FormBody.Builder()
+            .build()
+
+        val request = Request.Builder()
+            .addHeader("Accept", "application/json")
+            .addHeader("Content-Type", "application/json")
+            .addHeader("Content-Length", "0")
+            .addHeader("Authorization", "Bearer $mAccessToken")
+            .url("https://api.spotify.com/v1/me/player/previous")
+            .post(body)
+            .build()
+
+        cancelCall()
+
+        mCall = mOkHttpClient.newCall(request)
+
+        mCall?.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                setResponse("Failed to fetch data: $e")
+            }
+
+            @Throws(IOException::class)
+            override fun onResponse(call: Call, response: Response) {
+                try {
+                    println("--------------------------------------------------------------------$response")
+
+                } catch (e: JSONException) {
+                    setResponse("Failed to parse data: $e")
+                }
+            }
+        })
+    }
+
     override fun onDestroy() {
         cancelCall()
         super.onDestroy()
-    }
-
-    fun onGetUserProfileClicked(view: View) {
-        if (mAccessToken == null) {
-            showRequestAccessTokenSnackbar()
-        } else {
-            requestUserProfile()
-        }
     }
 
     private fun requestUserProfile() {
@@ -163,7 +221,6 @@ class MainActivity : AppCompatActivity() {
     fun onRequestCodeClicked() {
         val request = getAuthenticationRequest(AuthorizationResponse.Type.CODE)
         AuthorizationClient.openLoginActivity(this, AUTH_CODE_REQUEST_CODE, request)
-        //fetchJson()
         requestDevices()
     }
 
@@ -176,10 +233,75 @@ class MainActivity : AppCompatActivity() {
         pauseButton.setOnClickListener {
             pauseSong()
         }
+
+        searchButton.setOnClickListener {
+            //user input song, artist is taken in as a string
+            var songArtist = songTB.text
+            //the string is then split into a string array [0] = song name [1] = artist
+            var songArtistArr = songArtist?.split(",")
+            //song = songArtistArr [0] + URL query additions
+            var songURL = songArtistArr?.get(0)?.replace(" ", "%20")
+            //artist = songArtistArr[1] + URL query additions
+            var artistURL = songArtistArr?.get(1)?.replace(" ", "%20")
+            //songArtistURL concatenates songUrl and artistURL except inbetween the two there are query params
+            var songArtistURL = "$songURL%2C%20$artistURL"
+
+            //gets songs uri from spotify
+            songSearch(songArtistURL)
+
+            /*if(::TRACK_URI.isInitialized) {
+                //queue the song
+                queueSong()
+            }*/
+        }
+
+        queueButton.setOnClickListener {
+            queueSong()
+        }
+
+        nextButton.setOnClickListener {
+            nextSong()
+        }
+
+        previousButton.setOnClickListener {
+            previousSong()
+        }
     }
 
     private fun queueSong() {
 
+        val TRACK_URI_HEX = TRACK_URI.replace("spotify:track:", "")
+
+        val body = FormBody.Builder()
+            .build()
+
+        val request = Request.Builder()
+            .addHeader("Accept", "application/json")
+            .addHeader("Content-Type", "application/json")
+            .addHeader("Authorization", "Bearer $mAccessToken")
+            .url("https://api.spotify.com/v1/me/player/queue?uri=spotify%3Atrack%3A$TRACK_URI_HEX")
+            .post(body)
+            .build()
+
+        cancelCall()
+
+        mCall = mOkHttpClient.newCall(request)
+
+        mCall?.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                setResponse("Failed to fetch data: $e")
+            }
+
+            @Throws(IOException::class)
+            override fun onResponse(call: Call, response: Response) {
+                try {
+                    println("--------------------------------------------------------------------$response")
+
+                } catch (e: JSONException) {
+                    setResponse("Failed to parse data: $e")
+                }
+            }
+        })
     }
 
     fun playSong() {
