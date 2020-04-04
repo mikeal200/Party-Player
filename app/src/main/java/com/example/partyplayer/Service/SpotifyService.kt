@@ -1,4 +1,4 @@
-package com.example.party_player
+package com.example.partyplayer.Service
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -28,7 +28,7 @@ object SpotifyService {
         }
         val connectionListener = object : Connector.ConnectionListener {
             override fun onConnected(spotifyAppRemote: SpotifyAppRemote) {
-                this@SpotifyService.spotifyAppRemote = spotifyAppRemote
+                SpotifyService.spotifyAppRemote = spotifyAppRemote
                 handler(true)
             }
             override fun onFailure(throwable: Throwable) {
@@ -36,7 +36,8 @@ object SpotifyService {
                 handler(false)
             }
         }
-        SpotifyAppRemote.connect(context, connectionParams, connectionListener)
+        SpotifyAppRemote.connect(context,
+            connectionParams, connectionListener)
     }
 
     fun play(uri: String) {

@@ -1,9 +1,10 @@
-package com.example.party_player
+package com.example.partyplayer.mainUI
 
 import android.os.Bundle;
 
 import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity
+import com.example.partyplayer.R
 
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(throwable: Throwable) {
                 Log.e("MainActivity", throwable.message, throwable)
                 // Something went wrong when attempting to connect! Handle errors here
+                throw Exception("Could not connect, Something went wrong")
             }
         })
     }

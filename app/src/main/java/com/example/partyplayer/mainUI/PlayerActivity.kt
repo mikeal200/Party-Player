@@ -1,8 +1,11 @@
-package com.example.party_player
+package com.example.partyplayer.mainUI
 
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.example.partyplayer.R
+import com.example.partyplayer.Service.PlayingState
+import com.example.partyplayer.Service.SpotifyService
 import kotlinx.android.synthetic.main.activity_player.*
 
 class PlayerActivity : AppCompatActivity() {
