@@ -1,4 +1,4 @@
-package com.example.party_player;
+package com.example.partyPlayer;
 
 import android.os.AsyncTask;
 
