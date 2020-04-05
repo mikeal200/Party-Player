@@ -1,11 +1,9 @@
-package com.example.party_player
+package com.example.partyPlayer
 
 
-import SpotifyRequests
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -15,7 +13,6 @@ import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
-import com.spotify.sdk.android.auth.BuildConfig.VERSION_NAME
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.*
 import org.json.JSONException
@@ -109,7 +106,8 @@ class MainActivity : AppCompatActivity() {
                 try {
                     println("--------------------------------------------------------------------$response")
 
-                } catch (e: JSONException) {
+                }
+                catch (e: JSONException) {
                     setResponse("Failed to parse data: $e")
                 }
             }
