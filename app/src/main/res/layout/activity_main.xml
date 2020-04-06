@@ -49,7 +49,7 @@
             android:id="@+id/pauseButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="pause"
+            android:text="Pause"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -68,7 +68,7 @@
             android:id="@+id/searchButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="search"
+            android:text="Search"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

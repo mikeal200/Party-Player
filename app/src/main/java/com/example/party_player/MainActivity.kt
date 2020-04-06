@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
-import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
@@ -28,16 +27,15 @@ class MainActivity : AppCompatActivity() {
 
     private val CLIENT_ID = "3d04daf658674a5c97e487250a7c49ef"
     private val redirectUri = "com.example.party-player://callback"
-    val AUTH_TOKEN_REQUEST_CODE = 0x10
-    val AUTH_CODE_REQUEST_CODE = 0x11
-    lateinit var spotifyAppRemote: SpotifyAppRemote
+    private val AUTH_TOKEN_REQUEST_CODE = 0x10
+    private val AUTH_CODE_REQUEST_CODE = 0x11
     lateinit var TRACK_URI: String
     lateinit var DEVICE_ID: String
 
-    val mOkHttpClient: OkHttpClient = OkHttpClient()
-    var mAccessToken: String? = null
+    private val mOkHttpClient: OkHttpClient = OkHttpClient()
+    private var mAccessToken: String? = null
     private var mAccessCode: String? = null
-    var mCall: Call? = null
+    private var mCall: Call? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    fun nextSong() {
+    private fun nextSong() {
         val body = FormBody.Builder()
             .build()
 
@@ -116,7 +114,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    fun previousSong() {
+    private fun previousSong() {
         val body = FormBody.Builder()
             .build()
 
@@ -236,15 +234,15 @@ class MainActivity : AppCompatActivity() {
 
         searchButton.setOnClickListener {
             //user input song, artist is taken in as a string
-            var songArtist = songTB.text
+            val songArtist = songTB.text
             //the string is then split into a string array [0] = song name [1] = artist
-            var songArtistArr = songArtist?.split(",")
+            val songArtistArr = songArtist?.split(",")
             //song = songArtistArr [0] + URL query additions
-            var songURL = songArtistArr?.get(0)?.replace(" ", "%20")
+            val songURL = songArtistArr?.get(0)?.replace(" ", "%20")
             //artist = songArtistArr[1] + URL query additions
-            var artistURL = songArtistArr?.get(1)?.replace(" ", "%20")
+            val artistURL = songArtistArr?.get(1)?.replace(" ", "%20")
             //songArtistURL concatenates songUrl and artistURL except inbetween the two there are query params
-            var songArtistURL = "$songURL%2C%20$artistURL"
+            val songArtistURL = "$songURL%2C%20$artistURL"
 
             //gets songs uri from spotify
             songSearch(songArtistURL)
@@ -304,7 +302,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    fun playSong() {
+    private fun playSong() {
         val body = FormBody.Builder()
             .build()
 
@@ -372,7 +370,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun onRequestTokenClicked(): Boolean {
+    private fun onRequestTokenClicked(): Boolean {
         val request = getAuthenticationRequest(AuthorizationResponse.Type.TOKEN)
         AuthorizationClient.openLoginActivity(this, AUTH_TOKEN_REQUEST_CODE, request)
         return true
