@@ -52,9 +52,9 @@
             android:id="@+id/seedOne"
             android:layout_width="128dp"
             android:layout_height="32dp"
-            android:layout_marginStart="104dp"
-            android:layout_marginLeft="104dp"
-            android:layout_marginTop="72dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="56dp"
             android:entries="@array/seed_items"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -63,30 +63,30 @@
             android:id="@+id/textInputLayout"
             android:layout_width="235dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            app:layout_constraintStart_toEndOf="@+id/seedOne"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@+id/seedOneTB"
+            app:layout_constraintTop_toTopOf="@+id/seedOneTB">
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/seedOneTB"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_width="235dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="56dp"
             android:hint="hint"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="124dp" />
+            app:layout_constraintStart_toEndOf="@+id/seedOne"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/searchButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="104dp"
-            android:layout_marginLeft="104dp"
-            android:layout_marginBottom="355dp"
-            android:text="woah"
+            android:layout_marginStart="56dp"
+            android:layout_marginLeft="56dp"
+            android:layout_marginBottom="508dp"
+            android:text="Create!"
             app:layout_constraintBottom_toTopOf="@+id/response_text_view"
             app:layout_constraintStart_toStartOf="parent" />
 

@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.GsonBuilder
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.sdk.android.auth.AuthorizationClient
@@ -110,6 +111,11 @@ class MainActivity : AppCompatActivity() {
                 println("Failed to execute")
             }
         })
+    }
+
+    fun getGenre(genreTextInput: TextInputEditText) {
+        // get text out of the TextInputEditText
+        var genre = genreTextInput.text
     }
 
     fun nextSong() {
