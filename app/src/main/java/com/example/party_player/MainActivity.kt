@@ -6,6 +6,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -30,9 +32,10 @@ class MainActivity : AppCompatActivity() {
     private val redirectUri = "com.example.party-player://callback"
     val AUTH_TOKEN_REQUEST_CODE = 0x10
     val AUTH_CODE_REQUEST_CODE = 0x11
-    lateinit var spotifyAppRemote: SpotifyAppRemote
     lateinit var TRACK_URI: String
+    lateinit var ARTIST_URI: String
     lateinit var DEVICE_ID: String
+    var artistUrl: String? = null
 
     val mOkHttpClient: OkHttpClient = OkHttpClient()
     var mAccessToken: String? = null
@@ -74,6 +77,33 @@ class MainActivity : AppCompatActivity() {
 
                 val songs = body
                 //val search: Tracks? = gson.fromJson(body, Tracks::class.java)
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed to execute")
+            }
+        })
+    }
+
+    fun artistSearch(query: String?) {
+
+        val url = "https://api.spotify.com/v1/search?q=$query&type=artist&market=us"
+
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Authorization", "Bearer $mAccessToken")
+            .build()
+
+        val client = OkHttpClient()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                val root = JSONObject(body)
+
+                //rename this
+                val ja = root.getJSONObject("artists").getJSONArray("items")
+                ARTIST_URI = ja.getJSONObject(0).getString("uri")
+                println(ARTIST_URI)
             }
 
             override fun onFailure(call: Call, e: IOException) {
@@ -225,46 +255,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-
-        playButton.setOnClickListener {
-            playSong()
-        }
-
-        pauseButton.setOnClickListener {
-            pauseSong()
-        }
-
         searchButton.setOnClickListener {
-            //user input song, artist is taken in as a string
-            var songArtist = songTB.text
-            //the string is then split into a string array [0] = song name [1] = artist
-            var songArtistArr = songArtist?.split(",")
+
+            //user inputs artist and it is taken in as a string
+            var songArtist = seedOneTB.text
+            //the string is then split into a string array
+            var songArtistArr = songArtist?.split(" ")
+            if (songArtistArr != null) {
+                for(item in songArtistArr.indices) {
+                    if(songArtistArr.size > 1) {
+                        artistUrl += songArtistArr.get(item).replace(" ", "%20")
+                    }
+                    else {
+                        artistUrl = songArtistArr.get(item)
+                    }
+                }
+            }
+
+
             //song = songArtistArr [0] + URL query additions
-            var songURL = songArtistArr?.get(0)?.replace(" ", "%20")
-            //artist = songArtistArr[1] + URL query additions
-            var artistURL = songArtistArr?.get(1)?.replace(" ", "%20")
-            //songArtistURL concatenates songUrl and artistURL except inbetween the two there are query params
-            var songArtistURL = "$songURL%2C%20$artistURL"
+            //var songURL = songArtistArr?.get(0)?.replace(" ", "%20")
+            //var songArtistURL = "$songURL%2C%20$artistURL"
 
             //gets songs uri from spotify
-            songSearch(songArtistURL)
-
-            /*if(::TRACK_URI.isInitialized) {
-                //queue the song
-                queueSong()
-            }*/
-        }
-
-        queueButton.setOnClickListener {
-            queueSong()
-        }
-
-        nextButton.setOnClickListener {
-            nextSong()
-        }
-
-        previousButton.setOnClickListener {
-            previousSong()
+            artistSearch(artistUrl)
         }
     }
 
