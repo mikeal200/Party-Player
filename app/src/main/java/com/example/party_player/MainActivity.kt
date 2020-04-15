@@ -1,24 +1,18 @@
 package com.example.party_player
 
 
-import SpotifyRequests
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.GsonBuilder
-import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
-import com.spotify.sdk.android.auth.BuildConfig.VERSION_NAME
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.*
 import org.json.JSONException
@@ -39,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     var artistUrl: String? = null
 
     val mOkHttpClient: OkHttpClient = OkHttpClient()
-    var mAccessToken: String? = null
+    public var mAccessToken: String? = null
     private var mAccessCode: String? = null
     var mCall: Call? = null
 
@@ -52,7 +46,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun songSearch(query: String) {
-        println("Attempting to fetch json")
 
         val url = "https://api.spotify.com/v1/search?q=$query&type=track%2Cartist&market=US&limit=1"
 
@@ -262,30 +255,34 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         searchButton.setOnClickListener {
+            var artist = Artist(seedOneTB.text, mAccessToken)
+            println(artist.getURI())
+        }
 
-            //user inputs artist and it is taken in as a string
+        /*searchButton.setOnClickListener {
+            //user input song, artist is taken in as a string
             var songArtist = seedOneTB.text
-            //the string is then split into a string array
-            var songArtistArr = songArtist?.split(" ")
-            if (songArtistArr != null) {
-                for(item in songArtistArr.indices) {
-                    if(songArtistArr.size > 1) {
-                        artistUrl += songArtistArr.get(item).replace(" ", "%20")
-                    }
-                    else {
-                        artistUrl = songArtistArr.get(item)
-                    }
-                }
-            }
-
-
+            //the string is then split into a string array [0] = song name [1] = artist
+            var songArtistArr = songArtist?.split(",")
             //song = songArtistArr [0] + URL query additions
-            //var songURL = songArtistArr?.get(0)?.replace(" ", "%20")
-            //var songArtistURL = "$songURL%2C%20$artistURL"
+            var songURL = songArtistArr?.get(0)?.replace(" ", "%20")
+            //artist = songArtistArr[1] + URL query additions
+            var artistURL = songArtistArr?.get(1)?.replace(" ", "%20")
+            //songArtistURL concatenates songUrl and artistURL except inbetween the two there are query params
+            var songArtistURL = "$songURL%2C%20$artistURL"
 
             //gets songs uri from spotify
-            artistSearch(artistUrl)
-        }
+            //songSearch(songArtistURL)
+
+            var song: Song = Song(songArtistURL, mAccessToken)
+
+            println(song.getURI())
+
+            /*if(::TRACK_URI.isInitialized) {
+                //queue the song
+                queueSong()
+            }*/
+        }*/
     }
 
     private fun queueSong() {
