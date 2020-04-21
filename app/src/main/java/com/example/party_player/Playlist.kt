@@ -30,6 +30,7 @@ class Playlist(seed1: String, seed1Type: String, songLimit: Int) {
     var endpoint_url = "https://api.spotify.com/v1/recommendations?"
     val market="US"
 
+<<<<<<< Updated upstream
     var limit: Int
     var genre: String
     var mAccessToken: String? = null
@@ -38,6 +39,14 @@ class Playlist(seed1: String, seed1Type: String, songLimit: Int) {
         limit = songLimit;
         genre = seed1Type;
     }
+=======
+    var limit = songLimit
+    var mAccessToken = mAccessToken
+    var genre = seed1
+
+    var client = OkHttpClient()
+    //var request = OkHttpRequest(client)
+>>>>>>> Stashed changes
 
     fun generateRecommendation(seed1: String) {
         val url = "${endpoint_url}limit=${limit}&market=${market}&seed_genres=${genre}'"
@@ -51,7 +60,69 @@ class Playlist(seed1: String, seed1Type: String, songLimit: Int) {
 
     }
 
+<<<<<<< Updated upstream
     fun create() {
 
+=======
+    fun createPlaylist() {
+        //getUserUri()
+        val json = "{\n" +
+                "  \"name\": \"New Playlist\",\n" +
+                "  \"description\": \"New playlist description\",\n" +
+                "  \"public\": false\n" +
+                "}"
+        val JSON = "application/json;charset=utf-8".toMediaTypeOrNull()
+        val userUri = getUserUri()
+        var mCall: Call? = null
+
+        var body = FormBody.Builder()
+            .build()
+
+        val request = Request.Builder()
+            .addHeader("Accept", "application/json")
+            .addHeader("Content-Type", "application/json")
+            .addHeader("Content-Length", "0")
+            .addHeader("Authorization", "Bearer $mAccessToken")
+            .url("https://api.spotify.com/v1/users/$userUri/playlists")
+            .post(body)
+            .build()
+
+        val call = client.newCall(request)
+
+        call.enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                println(request)
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed to execute")
+            }
+
+
+        })
+    }
+
+    fun getUserUri(): String{
+        val url = "https://api.spotify.com/v1/me"
+
+        var userUri: String = ""
+
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Authorization", "Bearer $mAccessToken")
+            .build()
+
+        val client = OkHttpClient()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                userUri = JSONObject(body).get("id").toString()
+            }
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed to execute")
+            }
+        })
+        return userUri
+>>>>>>> Stashed changes
     }
 }
