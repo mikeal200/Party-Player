@@ -33,11 +33,6 @@ class Song(name: String, mAccessToken: String?) {
                     //val uri = c.getString("href")
                 }
                 println(body)
-
-                val gson = GsonBuilder().create()
-
-                val songs = body
-                //val search: Tracks? = gson.fromJson(body, Tracks::class.java)
             }
 
             override fun onFailure(call: Call, e: IOException) {

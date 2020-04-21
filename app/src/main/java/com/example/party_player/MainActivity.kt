@@ -1,9 +1,10 @@
 package com.example.party_player
 
-
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -255,8 +256,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         searchButton.setOnClickListener {
-            var artist = Artist(seedOneTB.text, mAccessToken)
-            println(artist.getURI())
+            val mySpinner = findViewById<View>(R.id.seedOne) as Spinner
+            val text = mySpinner.selectedItem.toString()
+            var playlist = Playlist(seedOneTB.text, text, 10, mAccessToken)
+            playlist.generateRecommendation()
+            playlist.populateList()
         }
 
         /*searchButton.setOnClickListener {
@@ -398,7 +402,7 @@ class MainActivity : AppCompatActivity() {
     private fun getAuthenticationRequest(type: AuthorizationResponse.Type): AuthorizationRequest {
         return AuthorizationRequest.Builder(CLIENT_ID, type, redirectUri.toString())
             .setShowDialog(false)
-            .setScopes(arrayOf("user-modify-playback-state"))
+            .setScopes(arrayOf("user-modify-playback-state", "user-read-private", "user-read-email"))
             .setCampaign("your-campaign-token")
             .build()
     }
