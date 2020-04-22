@@ -4,7 +4,6 @@ import android.text.Editable
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 
-import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
@@ -22,7 +21,7 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
     var mAccessToken = mAccessToken
     var genre = seed1
 
-    var userUri: String? = null
+    var userUri = "839yfge3iixzaxa9n0pvh3m18"
 
     var client = OkHttpClient()
     //var request = OkHttpRequest(client)
@@ -43,10 +42,7 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
                 for(x in 0 until limit - 1) {
                     root.add(
                         x,
-                        JSONObject(body).getJSONArray("tracks").getJSONObject(x).get("uri").toString().replace(
-                            "spotify:track:",
-                            ""
-                        )
+                        JSONObject(body).getJSONArray("tracks").getJSONObject(x).get("uri").toString()
                     )
                 }
             }
@@ -66,11 +62,11 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
         val json = "{\n" +
                 "  \"name\": \"New Playlist\",\n" +
                 "  \"description\": \"New playlist description\",\n" +
-                "  \"public\": false\n" +
+                "  \"public\": true\n" +
                 "}"
         val JSON = "application/json;charset=utf-8".toMediaTypeOrNull()
         var body = RequestBody.create(JSON, json)
-        val userUri = getUserUri()
+        //val userUri = getUserUri()
         var mCall: Call? = null
 
         body = FormBody.Builder()
@@ -89,11 +85,11 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
 
         call.enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                println(request)
+                println(response.toString())
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                println("Failed to execute")
+                println("Failed to execute15")
             }
 
 
