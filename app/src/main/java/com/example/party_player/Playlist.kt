@@ -10,31 +10,42 @@ import org.json.JSONObject
 import java.io.IOException
 import java.nio.Buffer
 
-class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken: String?,
-               seed2: String = "", seed2Type: String = "",
-               seed3: String = "", seed3Type: String = "",
-               seed4: String = "", seed4Type: String = "",
-               seed5: String = "", seed5Type: String = ""
-               ) {
+class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken: String?) {
 
     var endpoint_url = "https://api.spotify.com/v1/recommendations?"
     val market="US"
 
     var limit = songLimit
     var mAccessToken = mAccessToken
-    var genre = seed1
-
-    //var userUri = "839yfge3iixzaxa9n0pvh3m18"
+    var seedType = seed1Type
+    val seed = seed1
 
     //var client = OkHttpClient()
     //var request = OkHttpRequest(client)
 
     fun generateRecommendation(): MutableList<String>{
         val root: MutableList<String> = ArrayList()
-        val url = "$endpoint_url&limit=$limit&market=$market&seed_genres=$genre"
+        var url = "$endpoint_url&limit=$limit&market=$market&"
+        var finalUrl = ""
+
+
+        if(seedType == "Genre") {
+            finalUrl = url + "seed_genres=${seed.toString()}"
+        }
+        else if(seedType == "Artist") {
+            val artistSeed = Artist(seed, mAccessToken).getURI()
+            finalUrl = url + "seed_artists=$artistSeed"
+        }
+        else if(seedType == "Song") {
+            var songSeed = Song(seed.toString(), mAccessToken).getURI()
+            finalUrl = url + "seed_tracks=$songSeed"
+        }
+        else {
+            println("seed was not found")
+        }
 
         val request = Request.Builder()
-            .url(url)
+            .url(finalUrl)
             .addHeader("Authorization", "Bearer $mAccessToken")
             .build()
 

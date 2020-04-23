@@ -8,7 +8,8 @@ import java.io.IOException
 
 class Song(name: String, mAccessToken: String?) {
 
-    var TRACK_URI: String = ""
+    var trackUri = ""
+    var finalUri = ""
     var songName = name
     var mAccessToken = mAccessToken
 
@@ -29,7 +30,7 @@ class Song(name: String, mAccessToken: String?) {
                 val ja = root.getJSONObject("tracks").getJSONArray("items")
                 ja.getString(0)
                 for (i in 0 until ja.length()) {
-                    TRACK_URI = ja.getJSONObject(i).getString("uri")
+                    trackUri = ja.getJSONObject(i).getString("uri")
                     //val uri = c.getString("href")
                 }
                 println(body)
@@ -39,6 +40,8 @@ class Song(name: String, mAccessToken: String?) {
                 println("Failed to execute")
             }
         })
-        return TRACK_URI
+        Thread.sleep(1_000)
+        finalUri = trackUri.replace("spotify:track:", "")
+        return finalUri
     }
 }

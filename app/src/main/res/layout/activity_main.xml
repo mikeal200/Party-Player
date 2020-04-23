@@ -39,15 +39,6 @@
             tools:text="Code: 089d841ccc194c10a77afad9e1c11d54"
             tools:visibility="gone" />
 
-        <TextView
-            android:id="@+id/response_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Line 1\nLine 2\nLine 3" />
-
         <Spinner
             android:id="@+id/seedOne"
             android:layout_width="128dp"
@@ -74,21 +65,20 @@
             android:layout_width="235dp"
             android:layout_height="37dp"
             android:layout_marginTop="56dp"
-            android:hint="hint"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/seedOne"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/searchButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="56dp"
-            android:layout_marginLeft="56dp"
-            android:layout_marginBottom="508dp"
             android:text="Create!"
-            app:layout_constraintBottom_toTopOf="@+id/response_text_view"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.421"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.232" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

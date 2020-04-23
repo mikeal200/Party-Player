@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         searchButton.setOnClickListener {
             val mySpinner = findViewById<View>(R.id.seedOne) as Spinner
             val text = mySpinner.selectedItem.toString()
-            var playlist = Playlist(seedOneTB.text, text, 10, mAccessToken)
+            var playlist = Playlist(seedOneTB.text, text, 50, mAccessToken)
             playlist.populateList()
         }
 
@@ -130,11 +130,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun setResponse(text: String) {
+    /*fun setResponse(text: String) {
         runOnUiThread {
             findViewById<TextView>(R.id.response_text_view)?.text = text
         }
-    }
+    }*/
 
     private fun updateTokenView() {
         findViewById<TextView>(R.id.token_text_view)?.text = getString(R.string.token, mAccessToken)
