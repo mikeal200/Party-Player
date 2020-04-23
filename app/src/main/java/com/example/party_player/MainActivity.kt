@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
     private fun getAuthenticationRequest(type: AuthorizationResponse.Type): AuthorizationRequest {
         return AuthorizationRequest.Builder(CLIENT_ID, type, redirectUri.toString())
             .setShowDialog(false)
-            .setScopes(arrayOf("playlist-modify-public", "playlist-modify-private"))
+            .setScopes(arrayOf("playlist-modify-public", "playlist-modify-private","user-read-email","user-read-private"))
             .setCampaign("your-campaign-token")
             .build()
     }
