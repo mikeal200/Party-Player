@@ -7,7 +7,8 @@ import java.io.IOException
 
 class Artist(name: Editable?, mAccessToken: String?) {
 
-    var ARTIST_URI: String = ""
+    var artistUri = ""
+    var finalUri = ""
     var artistName = name.toString()
     var mAccessToken = mAccessToken
 
@@ -39,14 +40,16 @@ class Artist(name: Editable?, mAccessToken: String?) {
                 val root = JSONObject(body)
 
                 val jsonItems = root.getJSONObject("artists").getJSONArray("items")
-                ARTIST_URI = jsonItems.getJSONObject(0).getString("uri")
-                println(ARTIST_URI)
+                artistUri = jsonItems.getJSONObject(0).getString("uri")
+                println(artistUri)
             }
 
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute")
             }
         })
-        return ARTIST_URI
+        Thread.sleep(1_000)
+        finalUri = artistUri.replace("spotify:artist:", "")
+        return finalUri
     }
 }
