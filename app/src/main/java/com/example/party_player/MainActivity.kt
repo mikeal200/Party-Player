@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             val mySpinner = findViewById<View>(R.id.seedOne) as Spinner
             val text = mySpinner.selectedItem.toString()
             var playlist = Playlist(seedOneTB.text, text, 10, mAccessToken)
-            playlist.createPlaylist()
+            playlist.populateList()
         }
 
         /*searchButton.setOnClickListener {

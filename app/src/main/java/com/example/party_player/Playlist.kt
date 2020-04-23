@@ -57,13 +57,13 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
     }
 
     fun populateList() {
-        createPlaylist()
+        println(createPlaylist())
     }
 
-    fun createPlaylist() {
+    fun createPlaylist(): String {
         var userUri = getUserUri()
         var x = SpotifyUserIdRequest("PartyPlayer Playlist", "Made by partyplayer", "true")
-
+        var playlistId: String = ""
         var test = Gson().toJson(x)
 
         /*val json = "{\n" +
@@ -96,6 +96,7 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
                 val spResponseObj: SpotifyPlaylistReponseObject = Gson().fromJson(response.body?.string(), SpotifyPlaylistReponseObject::class.java)
                 println(spResponseObj.id)
                 println(spResponseObj.name)
+                playlistId = spResponseObj.id
             }
 
             override fun onFailure(call: Call, e: IOException) {
@@ -104,6 +105,8 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
 
 
         })
+        Thread.sleep(1_000)
+        return playlistId
     }
 
     fun getUserUri(): String{
