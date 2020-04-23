@@ -12,6 +12,7 @@ class Artist(name: Editable?, mAccessToken: String?) {
     var artistName = name.toString()
     var mAccessToken = mAccessToken
 
+    //get request to return artist uri
     fun getURI(): String {
         //the string is then split into a string array
         var songArtistArr = artistName?.split(" ")

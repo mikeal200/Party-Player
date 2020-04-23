@@ -20,6 +20,7 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
     var seedType = seed1Type
     val seed = seed1
 
+    //get request to generate recommendation seed based off uris
     fun generateRecommendation(): MutableList<String>{
         val root: MutableList<String> = ArrayList()
         var url = "$endpoint_url&limit=$limit&market=$market&"
@@ -71,6 +72,7 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
         return root
     }
 
+    //populates playlist via given id
     fun populateList() {
         var playlistId = createPlaylist()
         var songUris = generateRecommendation()
@@ -115,6 +117,7 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
         println(finalUri)
     }
 
+    //creates blank playlist and returns playlist id
     fun createPlaylist(): String {
         var userUri = getUserUri()
         var x = SpotifyUserIdRequest("PartyPlayer Playlist", "Made by partyplayer", "true")
@@ -153,6 +156,7 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
         return playlistId
     }
 
+    //gets the URI of the current user
     fun getUserUri(): String{
         val url = "https://api.spotify.com/v1/me"
         var userUri: String = ""

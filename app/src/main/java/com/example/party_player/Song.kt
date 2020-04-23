@@ -12,6 +12,7 @@ class Song(name: String, mAccessToken: String?) {
     var songName = name
     var mAccessToken = mAccessToken
 
+    //get request for song uri
     fun getURI(): String {
 
         val url = "https://api.spotify.com/v1/search?q=${songName}&type=track%2Cartist&market=US&limit=1"
