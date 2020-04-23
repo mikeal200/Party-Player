@@ -58,7 +58,7 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
     }
 
     fun populateList() {
-        var userUri = createPlaylist()
+        var playlistId = createPlaylist()
         var songUris = generateRecommendation()
         var updatedUri: String?
         var finalUri = ""
@@ -75,6 +75,29 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
         for(x in 0 until songUris.size) {
             finalUri += songUris[x]
         }
+
+        val body = FormBody.Builder()
+            .build()
+
+        val request = Request.Builder()
+            .addHeader("Accept", "application/json")
+            .addHeader("Content-Type", "application/json")
+            .addHeader("Content-Length", "0")
+            .addHeader("Authorization", "Bearer $mAccessToken")
+            .url("https://api.spotify.com/v1/playlists/$playlistId/tracks?uris=$finalUri")
+            .post(body)
+            .build()
+
+        val client = OkHttpClient()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed to fetch data: $e")
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+
+            }
+        })
 
         println(finalUri)
     }
