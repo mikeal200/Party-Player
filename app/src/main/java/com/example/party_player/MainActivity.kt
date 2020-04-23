@@ -3,9 +3,11 @@ package com.example.party_player
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
@@ -72,6 +74,9 @@ class MainActivity : AppCompatActivity() {
             val text = mySpinner.selectedItem.toString()
             var playlist = Playlist(seedOneTB.text, text, 50, mAccessToken)
             playlist.populateList()
+            val myToast = Toast.makeText(applicationContext,"Playlist Created! Check Spotify.",Toast.LENGTH_SHORT)
+            myToast.setGravity(Gravity.CENTER, 0, 0)
+            myToast.show()
         }
 
         /*searchButton.setOnClickListener {
