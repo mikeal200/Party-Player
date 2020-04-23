@@ -53,11 +53,30 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
                 println("Failed to execute")
             }
         })
+        Thread.sleep(1_000)
         return root
     }
 
     fun populateList() {
-        println(createPlaylist())
+        var userUri = createPlaylist()
+        var songUris = generateRecommendation()
+        var updatedUri: String?
+        var finalUri = ""
+
+        for(x in 0 until songUris.size) {
+            updatedUri = songUris[x].replace(":", "%3A")
+            updatedUri += "%2C"
+            songUris[x] = updatedUri
+        }
+
+        var lastUri = songUris[songUris.size - 1].replace("%2C", "")
+        songUris[songUris.size - 1] = lastUri
+
+        for(x in 0 until songUris.size) {
+            finalUri += songUris[x]
+        }
+
+        println(finalUri)
     }
 
     fun createPlaylist(): String {
