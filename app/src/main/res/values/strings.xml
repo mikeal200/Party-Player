@@ -7,4 +7,10 @@
     <string name="btn_req_code">Request Code</string>
     <string name="btn_req_token">Request Token</string>
     <string name="btn_clear_credentials">Clear WebView Credentials</string>
+
+    <string-array name="seed_items">
+        <item>Song</item>
+        <item>Genre</item>
+        <item>Artist</item>
+    </string-array>
 </resources>
