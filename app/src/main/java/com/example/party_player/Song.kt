@@ -1,6 +1,5 @@
 package com.example.party_player
 
-import com.google.gson.GsonBuilder
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
@@ -31,7 +30,6 @@ class Song(name: String, mAccessToken: String?) {
                 ja.getString(0)
                 for (i in 0 until ja.length()) {
                     trackUri = ja.getJSONObject(i).getString("uri")
-                    //val uri = c.getString("href")
                 }
                 println(body)
             }
