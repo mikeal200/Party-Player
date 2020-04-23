@@ -2,10 +2,12 @@ package com.example.party_player
 
 import android.text.Editable
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 
 import org.json.JSONObject
 import java.io.IOException
+import java.nio.Buffer
 
 class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken: String?,
                seed2: String = "", seed2Type: String = "",
@@ -59,12 +61,8 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
 
     fun createPlaylist() {
         //getUserUri()
-        val json = "{\n" +
-                "  \"name\": \"New Playlist\",\n" +
-                "  \"description\": \"New playlist description\",\n" +
-                "  \"public\": true\n" +
-                "}"
-        val JSON = "application/json;charset=utf-8".toMediaTypeOrNull()
+        val json = "{\"name\":\"New Playlist\"}"
+        val JSON = "application/json".toMediaType()
         var body = RequestBody.create(JSON, json)
         //val userUri = getUserUri()
         var mCall: Call? = null
@@ -75,7 +73,6 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
         val request = Request.Builder()
             .addHeader("Accept", "application/json")
             .addHeader("Content-Type", "application/json")
-            .addHeader("Content-Length", "0")
             .addHeader("Authorization", "Bearer $mAccessToken")
             .url("https://api.spotify.com/v1/users/$userUri/playlists")
             .post(body)
@@ -86,6 +83,7 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
         call.enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 println(response.toString())
+                println(request.body.toString())
             }
 
             override fun onFailure(call: Call, e: IOException) {
