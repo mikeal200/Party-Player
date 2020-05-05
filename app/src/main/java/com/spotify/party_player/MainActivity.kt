@@ -1,4 +1,4 @@
-package com.example.party_player
+package com.spotify.party_player
 
 import android.content.Intent
 
@@ -12,9 +12,9 @@ import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
 import kotlinx.android.synthetic.main.activity_main.*
-import okhttp3.*
 import java.util.*
 
+const val baseURL = "https://api.spotify.com/v1/"
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,8 +25,8 @@ class MainActivity : AppCompatActivity() {
 
     var mAccessToken: String? = null
     private var mAccessCode: String? = null
-    var mCall: Call? = null
 
+    //automatically runs on start
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -35,11 +35,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.title = String.format(Locale.US, "Party-Player")
     }
 
-    override fun onDestroy() {
-        cancelCall()
-        super.onDestroy()
-    }
-
+    //sets up listener for button and gets spinner info and textbox text, then displays a message when the playlist is created
     private fun setupListeners() {
         searchButton.setOnClickListener {
             val mySpinner = findViewById<View>(R.id.seedOne) as Spinner
@@ -52,12 +48,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //gets auth token
     fun onRequestTokenClicked(): Boolean {
         val request = getAuthenticationRequest(AuthorizationResponse.Type.TOKEN)
         AuthorizationClient.openLoginActivity(this, AUTH_TOKEN_REQUEST_CODE, request)
         return true
     }
 
+    //sets scopes and makes auth request
     private fun getAuthenticationRequest(type: AuthorizationResponse.Type): AuthorizationRequest {
         return AuthorizationRequest.Builder(CLIENT_ID, type, redirectUri.toString())
             .setShowDialog(false)
@@ -66,6 +64,7 @@ class MainActivity : AppCompatActivity() {
             .build()
     }
 
+    //if request is completed access token and code are defined
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val response = AuthorizationClient.getResponse(resultCode, data)
@@ -75,9 +74,5 @@ class MainActivity : AppCompatActivity() {
         } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
             mAccessCode = response.code
         }
-    }
-
-    fun cancelCall() {
-        mCall?.cancel()
     }
 }

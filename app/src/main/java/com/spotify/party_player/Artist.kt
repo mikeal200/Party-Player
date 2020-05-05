@@ -1,4 +1,4 @@
-package com.example.party_player
+package com.spotify.party_player
 
 import android.text.Editable
 import okhttp3.*
@@ -12,6 +12,7 @@ class Artist(name: Editable?, mAccessToken: String?) {
     var artistName = name.toString()
     var mAccessToken = mAccessToken
 
+    //get request to return artist uri
     fun getURI(): String {
         //the string is then split into a string array
         var songArtistArr = artistName?.split(" ")
@@ -26,7 +27,7 @@ class Artist(name: Editable?, mAccessToken: String?) {
             }
         }
 
-        val url = "https://api.spotify.com/v1/search?q=$artistName&type=artist&market=us"
+        val url = "${baseURL}search?q=$artistName&type=artist&market=us"
 
         val request = Request.Builder()
             .url(url)
