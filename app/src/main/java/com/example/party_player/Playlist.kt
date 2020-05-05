@@ -12,7 +12,6 @@ import java.io.IOException
 
 class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken: String?) {
 
-    var endpoint_url = "https://api.spotify.com/v1/recommendations?"
     val market="US"
 
     var limit = songLimit
@@ -23,7 +22,7 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
     //get request to generate recommendation seed based off uris
     fun generateRecommendation(): MutableList<String>{
         val root: MutableList<String> = ArrayList()
-        var url = "$endpoint_url&limit=$limit&market=$market&"
+        var url = "${baseURL}recommendations?&limit=$limit&market=$market&"
         var finalUrl = ""
 
 
@@ -100,7 +99,7 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
             .addHeader("Content-Type", "application/json")
             .addHeader("Content-Length", "0")
             .addHeader("Authorization", "Bearer $mAccessToken")
-            .url("https://api.spotify.com/v1/playlists/$playlistId/tracks?uris=$finalUri")
+            .url("${baseURL}playlists/$playlistId/tracks?uris=$finalUri")
             .post(body)
             .build()
 
@@ -131,7 +130,7 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
             .addHeader("Accept", "application/json")
             .addHeader("Content-Type", "application/json")
             .addHeader("Authorization", "Bearer $mAccessToken")
-            .url("https://api.spotify.com/v1/users/$userUri/playlists")
+            .url("${baseURL}users/$userUri/playlists")
             .post(body)
             .build()
 
@@ -158,7 +157,7 @@ class Playlist(seed1: Editable?, seed1Type: String, songLimit: Int, mAccessToken
 
     //gets the URI of the current user
     fun getUserUri(): String{
-        val url = "https://api.spotify.com/v1/me"
+        val url = "${baseURL}me"
         var userUri: String = ""
         val request = Request.Builder()
             .url(url)

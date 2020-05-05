@@ -27,7 +27,7 @@ class Artist(name: Editable?, mAccessToken: String?) {
             }
         }
 
-        val url = "https://api.spotify.com/v1/search?q=$artistName&type=artist&market=us"
+        val url = "${baseURL}search?q=$artistName&type=artist&market=us"
 
         val request = Request.Builder()
             .url(url)

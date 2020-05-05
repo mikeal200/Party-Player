@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.*
 import java.util.*
 
+const val baseURL = "https://api.spotify.com/v1/"
 
 class MainActivity : AppCompatActivity() {
 
