@@ -1,8 +1,6 @@
-package com.example.party_player
+package com.spotify.party_player
 
 import android.text.Editable
-import android.view.Gravity
-import android.widget.Toast
 import com.google.gson.Gson
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType

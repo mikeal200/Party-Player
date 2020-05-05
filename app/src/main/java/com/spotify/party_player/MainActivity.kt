@@ -1,4 +1,4 @@
-package com.example.party_player
+package com.spotify.party_player
 
 import android.content.Intent
 
@@ -12,7 +12,6 @@ import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
 import kotlinx.android.synthetic.main.activity_main.*
-import okhttp3.*
 import java.util.*
 
 const val baseURL = "https://api.spotify.com/v1/"

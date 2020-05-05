@@ -1,4 +1,4 @@
-package com.example.party_player
+package com.spotify.party_player
 
 import org.junit.Test
 

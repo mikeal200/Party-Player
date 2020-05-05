@@ -1,4 +1,4 @@
-package com.example.party_player
+package com.spotify.party_player
 
 import okhttp3.*
 import org.json.JSONObject

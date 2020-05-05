@@ -13,7 +13,7 @@ android {
         jcenter()
     }
     defaultConfig {
-        applicationId "com.example.party_player"
+        applicationId "com.spotify.party_player"
         minSdkVersion 16
         versionCode 1
         versionName "1.0"
